@@ -1,57 +1,93 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portfólio Moderno</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Junair Silva Amaral Filho — Portfólio</title>
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-  <nav class="navbar">
-    <h1 class="logo">SeuNome.dev</h1>
-    <ul>
-      <li><a href="#home">Home</a></li>
-      <li><a href="#projects">Projetos</a></li>
-      <li><a href="#contact">Contato</a></li>
-    </ul>
-  </nav>
-
-  <section id="home" class="hero">
-    <h1>Desenvolvedor Full-Stack & Designer</h1>
-    <p>Crio experiências digitais modernas, rápidas e visualmente impressionantes.</p>
-    <button onclick="scrollToProjects()">Ver Projetos</button>
-  </section>
-
-  <section id="projects" class="projects">
-    <h2>Projetos</h2>
-
-    <div class="project-grid">
-      <div class="card">
-        <img src="https://picsum.photos/500/300?random=1">
-        <h3>Dashboard de Análise</h3>
-        <p>Interface moderna com gráficos avançados.</p>
-      </div>
-
-      <div class="card">
-        <img src="https://picsum.photos/500/300?random=2">
-        <h3>E-Commerce Completo</h3>
-        <p>Carrinho persistente, checkout e painel admin.</p>
-      </div>
-
-      <div class="card">
-        <img src="https://picsum.photos/500/300?random=3">
-        <h3>API Financeira</h3>
-        <p>API REST robusta com autenticação JWT.</p>
-      </div>
+  <header class="nav" role="banner">
+    <div class="nav-inner">
+      <a class="brand" href="#home" aria-label="Ir para início">Junair Silva Amaral Filho</a>
+      <nav role="navigation" aria-label="Navegação principal">
+        <ul class="nav-list">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#projects">Projetos</a></li>
+          <li><a href="#contact">Contato</a></li>
+        </ul>
+      </nav>
     </div>
-  </section>
+  </header>
 
-  <footer id="contact">
-    <p>Feito com 💜 — Seu Nome © <span id="year"></span></p>
+  <main>
+    <section id="home" class="hero" tabindex="-1">
+      <div class="hero-panel">
+        <h1 class="hero-title">Junair Silva Amaral Filho</h1>
+        <p class="hero-sub">Desenvolvedor Full-Stack • Designer de Interfaces</p>
+
+        <div class="hero-cta">
+          <a class="btn-primary" href="#projects">Ver Projetos</a>
+          <a class="btn-ghost" href="mailto:junairsaf@gmail.com">junairsaf@gmail.com</a>
+        </div>
+
+        <div class="quick-contact" aria-hidden="false">
+          <span class="qc-label">Email</span>
+          <a class="qc-mail" href="mailto:junairsaf@gmail.com">junairsaf@gmail.com</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" class="projects" aria-labelledby="projects-heading">
+      <h2 id="projects-heading" class="section-title">Projetos de Destaque</h2>
+
+      <div class="grid">
+        <article class="card" tabindex="0">
+          <img loading="lazy" src="https://picsum.photos/800/480?random=11" alt="Preview Dashboard de Análise">
+          <div class="card-body">
+            <h3>Dashboard de Análise</h3>
+            <p>Interface com gráficos, filtros e performance em tempo real.</p>
+            <button class="card-cta" aria-label="Abrir projeto - Dashboard">Ver</button>
+          </div>
+        </article>
+
+        <article class="card" tabindex="0">
+          <img loading="lazy" src="https://picsum.photos/800/480?random=12" alt="Preview E-Commerce">
+          <div class="card-body">
+            <h3>E-Commerce Completo</h3>
+            <p>Checkout, carrinho persistente e painel administrativo.</p>
+            <button class="card-cta" aria-label="Abrir projeto - E-Commerce">Ver</button>
+          </div>
+        </article>
+
+        <article class="card" tabindex="0">
+          <img loading="lazy" src="https://picsum.photos/800/480?random=13" alt="Preview API Financeira">
+          <div class="card-body">
+            <h3>API Financeira</h3>
+            <p>Backend seguro, autenticação JWT e documentação clara.</p>
+            <button class="card-cta" aria-label="Abrir projeto - API">Ver</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="contact" class="contact">
+      <div class="contact-inner">
+        <h2 class="section-title">Contato</h2>
+        <p>Quer trabalhar junto? Envie um email — <a href="mailto:junairsaf@gmail.com">junairsaf@gmail.com</a></p>
+        <small class="muted">Também disponível via GitHub / LinkedIn — adicione links quando quiser.</small>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-inner">
+      <p>© <span id="year"></span> Junair Silva Amaral Filho — Feito com atenção ao design.</p>
+    </div>
   </footer>
 
   <script src="script.js"></script>
 </body>
 </html>
+
 
