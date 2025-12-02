@@ -1,1 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfólio Moderno</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <nav class="navbar">
+    <h1 class="logo">SeuNome.dev</h1>
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#projects">Projetos</a></li>
+      <li><a href="#contact">Contato</a></li>
+    </ul>
+  </nav>
+
+  <section id="home" class="hero">
+    <h1>Desenvolvedor Full-Stack & Designer</h1>
+    <p>Crio experiências digitais modernas, rápidas e visualmente impressionantes.</p>
+    <button onclick="scrollToProjects()">Ver Projetos</button>
+  </section>
+
+  <section id="projects" class="projects">
+    <h2>Projetos</h2>
+
+    <div class="project-grid">
+      <div class="card">
+        <img src="https://picsum.photos/500/300?random=1">
+        <h3>Dashboard de Análise</h3>
+        <p>Interface moderna com gráficos avançados.</p>
+      </div>
+
+      <div class="card">
+        <img src="https://picsum.photos/500/300?random=2">
+        <h3>E-Commerce Completo</h3>
+        <p>Carrinho persistente, checkout e painel admin.</p>
+      </div>
+
+      <div class="card">
+        <img src="https://picsum.photos/500/300?random=3">
+        <h3>API Financeira</h3>
+        <p>API REST robusta com autenticação JWT.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <p>Feito com 💜 — Seu Nome © <span id="year"></span></p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
 
