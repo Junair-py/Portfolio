@@ -1,152 +1,122 @@
-const hamburger = document.querySelector('.hamburger');
-const navMenu = document.querySelector('.nav-menu');
-const navLinks = document.querySelectorAll('.nav-link');
+// main.js - interações: hamburger, typing, counters, skill progress, form
+const hamburger = document.getElementById('hamburger');
+const navMenu = document.getElementById('navMenu');
 
-hamburger.addEventListener('click', () => {
+hamburger?.addEventListener('click', () => {
+  const expanded = hamburger.getAttribute('aria-expanded') === 'true';
+  hamburger.setAttribute('aria-expanded', String(!expanded));
   hamburger.classList.toggle('active');
   navMenu.classList.toggle('active');
 });
 
-navLinks.forEach(link => {
+// fecha menu ao clicar em link (mobile)
+document.querySelectorAll('.nav-link').forEach(link => {
   link.addEventListener('click', () => {
-    hamburger.classList.remove('active');
     navMenu.classList.remove('active');
+    hamburger.classList.remove('active');
+    hamburger?.setAttribute('aria-expanded', 'false');
   });
 });
 
+/* TYPING EFFECT */
+const typingTextEl = document.getElementById('typingText');
+const phrases = ['Full-Stack Developer', 'Front-end Enthusiast', 'Problem Solver', 'Criando experiências digitais'];
+let currentPhrase = 0;
+let currentChar = 0;
+let removing = false;
+let typingSpeed = 80;
+
+function typeLoop(){
+  if(!typingTextEl) return;
+  const phrase = phrases[currentPhrase];
+  if(!removing){
+    typingTextEl.textContent = phrase.slice(0, currentChar + 1);
+    currentChar++;
+    if(currentChar === phrase.length){
+      removing = true;
+      setTimeout(typeLoop, 900);
+    } else {
+      setTimeout(typeLoop, typingSpeed);
+    }
+  } else {
+    typingTextEl.textContent = phrase.slice(0, currentChar - 1);
+    currentChar--;
+    if(currentChar === 0){
+      removing = false;
+      currentPhrase = (currentPhrase + 1) % phrases.length;
+      setTimeout(typeLoop, 400);
+    } else {
+      setTimeout(typeLoop, typingSpeed / 1.5);
+    }
+  }
+}
+typeLoop();
+
+/* UTIL: check if element in viewport */
+function isInViewport(el, offset = 0) {
+  const rect = el.getBoundingClientRect();
+  return rect.top <= (window.innerHeight || document.documentElement.clientHeight) - offset;
+}
+
+/* STATS COUNTER */
+const counters = document.querySelectorAll('.stat-number');
+let countersAnimated = false;
+function animateCounters() {
+  if (countersAnimated) return;
+  const aboutSection = document.getElementById('about');
+  if (!aboutSection) return;
+  if (isInViewport(aboutSection, 100)) {
+    counters.forEach(el => {
+      const target = +el.dataset.target || 0;
+      const duration = 1200;
+      const start = 0;
+      const startTime = performance.now();
+      function step(time) {
+        const progress = Math.min((time - startTime) / duration, 1);
+        el.textContent = Math.floor(progress * (target - start) + start);
+        if (progress < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    });
+    countersAnimated = true;
+  }
+}
+
+/* SKILL PROGRESS */
+const skillProgressEls = document.querySelectorAll('.skill-progress');
+let skillsAnimated = false;
+function animateSkills() {
+  if (skillsAnimated) return;
+  const skillsSection = document.getElementById('skills');
+  if (!skillsSection) return;
+  if (isInViewport(skillsSection, 120)) {
+    skillProgressEls.forEach(el => {
+      const p = el.dataset.progress || '0';
+      el.style.width = `${p}%`;
+    });
+    skillsAnimated = true;
+  }
+}
+
+/* on scroll */
 window.addEventListener('scroll', () => {
-  const navbar = document.querySelector('.navbar');
-  if (window.scrollY > 50) {
-    navbar.style.background = 'rgba(15, 23, 42, 0.98)';
-  } else {
-    navbar.style.background = 'rgba(15, 23, 42, 0.95)';
-  }
+  animateCounters();
+  animateSkills();
+});
+window.addEventListener('load', () => {
+  // trigger on load if already visible
+  animateCounters();
+  animateSkills();
 });
 
-const typingText = document.querySelector('.typing-text');
-const texts = ['Full Stack Developer', 'Frontend Developer', 'Backend Developer', 'UI/UX Enthusiast'];
-let textIndex = 0;
-let charIndex = 0;
-let isDeleting = false;
-
-function type() {
-  const currentText = texts[textIndex];
-
-  if (isDeleting) {
-    typingText.textContent = currentText.substring(0, charIndex - 1);
-    charIndex--;
-  } else {
-    typingText.textContent = currentText.substring(0, charIndex + 1);
-    charIndex++;
-  }
-
-  let typeSpeed = isDeleting ? 50 : 100;
-
-  if (!isDeleting && charIndex === currentText.length) {
-    typeSpeed = 2000;
-    isDeleting = true;
-  } else if (isDeleting && charIndex === 0) {
-    isDeleting = false;
-    textIndex = (textIndex + 1) % texts.length;
-    typeSpeed = 500;
-  }
-
-  setTimeout(type, typeSpeed);
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  setTimeout(type, 1000);
-});
-
-const observerOptions = {
-  threshold: 0.3,
-  rootMargin: '0px 0px -100px 0px'
-};
-
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.style.opacity = '1';
-      entry.target.style.transform = 'translateY(0)';
-    }
-  });
-}, observerOptions);
-
-document.querySelectorAll('.skill-card, .project-card, .stat-item').forEach(el => {
-  el.style.opacity = '0';
-  el.style.transform = 'translateY(30px)';
-  el.style.transition = 'all 0.6s ease-out';
-  observer.observe(el);
-});
-
-const skillObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const progressBar = entry.target.querySelector('.skill-progress');
-      const targetWidth = progressBar.getAttribute('data-progress');
-      progressBar.style.width = targetWidth + '%';
-    }
-  });
-}, { threshold: 0.5 });
-
-document.querySelectorAll('.skill-card').forEach(card => {
-  skillObserver.observe(card);
-});
-
-const statObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const statNumbers = entry.target.querySelectorAll('.stat-number');
-      statNumbers.forEach(stat => {
-        const target = parseInt(stat.getAttribute('data-target'));
-        let current = 0;
-        const increment = target / 50;
-
-        const updateCount = () => {
-          current += increment;
-          if (current < target) {
-            stat.textContent = Math.ceil(current) + '+';
-            setTimeout(updateCount, 30);
-          } else {
-            stat.textContent = target + '+';
-          }
-        };
-
-        updateCount();
-      });
-      statObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.5 });
-
-const aboutSection = document.querySelector('.about');
-if (aboutSection) {
-  statObserver.observe(aboutSection);
-}
-
-const contactForm = document.querySelector('.contact-form');
-contactForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-
-  const name = document.getElementById('name').value;
-  const email = document.getElementById('email').value;
-  const subject = document.getElementById('subject').value;
-  const message = document.getElementById('message').value;
-
-  alert(`Obrigado, ${name}! Sua mensagem foi enviada com sucesso. Entrarei em contato em breve!`);
-
-  contactForm.reset();
-});
-
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function (e) {
+/* FORM - demo handling */
+const contactForm = document.getElementById('contactForm');
+const formFeedback = document.getElementById('formFeedback');
+if (contactForm) {
+  contactForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    const target = document.querySelector(this.getAttribute('href'));
-    if (target) {
-      target.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-    }
+    formFeedback.textContent = 'Mensagem enviada (demo). Obrigado!';
+    contactForm.reset();
+    setTimeout(()=> formFeedback.textContent = '', 4500);
   });
-});
+}
