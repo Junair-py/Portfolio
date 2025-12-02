@@ -1,3 +1,152 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--logos" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256"><path fill="#F7DF1E" d="M0 0h256v256H0V0Z"></path><path d="m67.312 213.932l19.59-11.856c3.78 6.701 7.218 12.371 15.465 12.371c7.905 0 12.89-3.092 12.89-15.12v-81.798h24.057v82.138c0 24.917-14.606 36.259-35.916 36.259c-19.245 0-30.416-9.967-36.087-21.996m85.07-2.576l19.588-11.341c5.157 8.421 11.859 14.607 23.715 14.607c9.969 0 16.325-4.984 16.325-11.858c0-8.248-6.53-11.17-17.528-15.98l-6.013-2.58c-17.357-7.387-28.87-16.667-28.87-36.257c0-18.044 13.747-31.792 35.228-31.792c15.294 0 26.292 5.328 34.196 19.247l-18.732 12.03c-4.125-7.389-8.591-10.31-15.465-10.31c-7.046 0-11.514 4.468-11.514 10.31c0 7.217 4.468 10.14 14.778 14.608l6.014 2.577c20.45 8.765 31.963 17.7 31.963 37.804c0 21.654-17.012 33.51-39.867 33.51c-22.339 0-36.774-10.654-43.819-24.574"></path></svg>
+const hamburger = document.querySelector('.hamburger');
+const navMenu = document.querySelector('.nav-menu');
+const navLinks = document.querySelectorAll('.nav-link');
 
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('active');
+  navMenu.classList.toggle('active');
+});
 
+navLinks.forEach(link => {
+  link.addEventListener('click', () => {
+    hamburger.classList.remove('active');
+    navMenu.classList.remove('active');
+  });
+});
+
+window.addEventListener('scroll', () => {
+  const navbar = document.querySelector('.navbar');
+  if (window.scrollY > 50) {
+    navbar.style.background = 'rgba(15, 23, 42, 0.98)';
+  } else {
+    navbar.style.background = 'rgba(15, 23, 42, 0.95)';
+  }
+});
+
+const typingText = document.querySelector('.typing-text');
+const texts = ['Full Stack Developer', 'Frontend Developer', 'Backend Developer', 'UI/UX Enthusiast'];
+let textIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
+
+function type() {
+  const currentText = texts[textIndex];
+
+  if (isDeleting) {
+    typingText.textContent = currentText.substring(0, charIndex - 1);
+    charIndex--;
+  } else {
+    typingText.textContent = currentText.substring(0, charIndex + 1);
+    charIndex++;
+  }
+
+  let typeSpeed = isDeleting ? 50 : 100;
+
+  if (!isDeleting && charIndex === currentText.length) {
+    typeSpeed = 2000;
+    isDeleting = true;
+  } else if (isDeleting && charIndex === 0) {
+    isDeleting = false;
+    textIndex = (textIndex + 1) % texts.length;
+    typeSpeed = 500;
+  }
+
+  setTimeout(type, typeSpeed);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(type, 1000);
+});
+
+const observerOptions = {
+  threshold: 0.3,
+  rootMargin: '0px 0px -100px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, observerOptions);
+
+document.querySelectorAll('.skill-card, .project-card, .stat-item').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(30px)';
+  el.style.transition = 'all 0.6s ease-out';
+  observer.observe(el);
+});
+
+const skillObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const progressBar = entry.target.querySelector('.skill-progress');
+      const targetWidth = progressBar.getAttribute('data-progress');
+      progressBar.style.width = targetWidth + '%';
+    }
+  });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.skill-card').forEach(card => {
+  skillObserver.observe(card);
+});
+
+const statObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const statNumbers = entry.target.querySelectorAll('.stat-number');
+      statNumbers.forEach(stat => {
+        const target = parseInt(stat.getAttribute('data-target'));
+        let current = 0;
+        const increment = target / 50;
+
+        const updateCount = () => {
+          current += increment;
+          if (current < target) {
+            stat.textContent = Math.ceil(current) + '+';
+            setTimeout(updateCount, 30);
+          } else {
+            stat.textContent = target + '+';
+          }
+        };
+
+        updateCount();
+      });
+      statObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+
+const aboutSection = document.querySelector('.about');
+if (aboutSection) {
+  statObserver.observe(aboutSection);
+}
+
+const contactForm = document.querySelector('.contact-form');
+contactForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById('name').value;
+  const email = document.getElementById('email').value;
+  const subject = document.getElementById('subject').value;
+  const message = document.getElementById('message').value;
+
+  alert(`Obrigado, ${name}! Sua mensagem foi enviada com sucesso. Entrarei em contato em breve!`);
+
+  contactForm.reset();
+});
+
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  });
+});
